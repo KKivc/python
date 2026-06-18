@@ -1,24 +1,31 @@
 from EduManagement import Student, StudentManagement
 
 m = StudentManagement()
-m.students.append(Student('张三', 80, 90, 85))
-m.students.append(Student('李四', 70, 75, 72))
+# 添加
+m.add_student('tt', 55, 65, 78)
 
-# 测试 find_student
-assert m.find_student('张三') != 0, '应该找到张三'
-assert m.find_student('王五') == 0, '不应该找到王五'
+s = m.find_student('tt')
 
-# 测试修改
-s = m.find_student('张三')
-s.chinese = 95
-assert m.students[0].chinese == 95
+# 验证存在
+assert s != 0
 
-# 测试删除
-s = m.find_student('李四')
-m.students.remove(s)
-assert len(m.students) == 1
+# 验证同名
+m.add_student('tt', 55, 65, 78)
 
-# 测试 __str__
-assert '张三' in str(m.students[0])
+s = m.find_student('tt')
 
-print('CI 测试全部通过!')
+assert s != 0
+
+# 修改
+m.modify_student('tt', 98,67, 87)
+s = m.find_student('tt')
+assert s.chinese == 98 and s.math == 67 and s.english == 87
+
+# 删除
+m.del_student('tt')
+s = m.find_student('tt')
+assert s == 0
+
+# 不存在
+s = m.find_student('uu')
+assert s == 0

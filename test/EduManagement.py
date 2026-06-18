@@ -23,36 +23,36 @@ class StudentManagement:
         return 0
 
     # 添加学生信息
-    def add_student(self):
-        stu_name = input('请输入学生姓名: ')
+    def add_student(self, stu_name, chinese, math, english):
         s = self.find_student(stu_name)
 
         if s != 0:
             print('该学生已存在，请重新选择')
+            return
+            
+        if 0 <= chinese <= 100 and 0 <= math <= 100 and 0 <= english <= 100:
+            self.students.append(Student(stu_name, chinese, math, english))
+            print('学生信息添加成功')
+            return
         else:
-            chinese = int(input('请输入学生语文成绩: '))
-            math = int(input('请输入学生数学成绩: '))
-            english = int(input('请输入学生英语成绩: '))
+            print('成绩输入有误，请重新输入')
+            return
             
-            if 0 <= chinese <= 100 and 0 <= math <= 100 and 0 <= english <= 100:
-                new_student = Student(stu_name, chinese, math, english)
-                self.students.append(new_student)
-                print('学生信息添加成功')
-                return
-            else:
-                print('成绩输入有误，请重新输入')
-                return
-            
+    def add_student_menu(self):
+        name = input('请输入学生姓名')
+        chinese = int(input('请输入语文成绩：'))
+        math = int(input('请输入数学成绩：'))
+        english = int(input('请输入英语成绩：'))
+        self.add_student(name, chinese, math, english)
+
     # 修改学生信息
-    def modify_student(self):
-        stu_name = input('请输入要修改的学生姓名: ')
+    def modify_student(self, stu_name, chinese, math, english):
         s = self.find_student(stu_name)
 
-        if s != 0:
-                chinese = int(input('请输入新的学生语文成绩: '))
-                math = int(input('请输入新的学生数学成绩: '))
-                english = int(input('请输入新的学生英语成绩: '))
+        if s == 0:
+                print('学生不存在')
 
+        else:
                 if 0 <= chinese <= 100 and 0 <= math <= 100 and 0 <= english <= 100:
                     s.chinese = chinese
                     s.math = math
@@ -62,15 +62,19 @@ class StudentManagement:
                 else:
                     print('成绩输入有误，请重新输入')
                     return
-        else:
-            print('学生不存在')
+        
+            
+    def modify_student_menu(self):
+        name = input('请输入要修改的学生姓名: ')
+        chinese = int(input('请输入新的学生语文成绩: '))
+        math = int(input('请输入新的学生数学成绩: '))
+        english = int(input('请输入新的学生英语成绩: '))
+        self.modify_student(name, chinese, math, english)
                 
 
     # 删除学生信息
-    def del_student(self):
-        stu_name = input('请输入要删除的学生姓名: ')
+    def del_student(self, stu_name):
         s = self.find_student(stu_name)
-
         if s != 0:
                 self.students.remove(s)
                 print('学生信息删除成功')
@@ -79,9 +83,12 @@ class StudentManagement:
         else:
             print('学生不存在')
 
+    def del_student_menu(self):
+        name = input('请输入要删除的学生姓名: ')
+        self.del_student(name)
+
     # 查询学生信息
-    def query_student(self):
-        stu_name = input('请输入要查询的学生姓名: ')
+    def query_student(self, stu_name):
         s = self.find_student(stu_name)
 
         if s != 0:
@@ -90,6 +97,10 @@ class StudentManagement:
 
         else:
             print('学生不存在')
+
+    def query_student_menu(self):
+        name = input('请输入要查询的学生姓名: ')
+        self.query_student(name)
 
     # 展示全部学生
     def list_allstudent(self):
@@ -113,16 +124,16 @@ class StudentManagement:
 
                 match choice:
                     case '1':
-                        self.add_student()
+                        self.add_student_menu()
 
                     case '2':
-                        self.modify_student()
+                        self.modify_student_menu()
 
                     case '3':
-                        self.del_student()
+                        self.del_student_menu()
 
                     case '4':
-                        self.query_student()
+                        self.query_student_menu()
 
                     case '5':
                         self.list_allstudent()
