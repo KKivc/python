@@ -1,0 +1,6 @@
+.codegraph/
+.reasonix/
+.venv/
+__pycache__/
+*.pyc
+AGENTS.md
