@@ -12,7 +12,7 @@ import argparse
 
 logging.basicConfig(
     level=logging.INFO,
-    filename='healthcheck.log',
+    
     format='%(asctime)s - %(message)s'
 )
 
