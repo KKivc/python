@@ -1,0 +1,39 @@
+'''
+1. 读取一个 config.json 配置文件，里面写若干个要监控的服务（名称 + URL）
+2. 对每个服务发 HTTP 请求，检查状态码是不是 200
+3. 记录每次检查的结果到日志文件，带时间戳
+4. 用 --status 参数查看最近一次所有服务的检查结果
+'''
+
+import json
+import requests
+import logging
+import argparse
+
+logging.basicConfig(
+    level=logging.INFO,
+    filename='healthcheck.log',
+    format='%(asctime)s - %(message)s'
+)
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--status', action='store_true')
+args = parser.parse_args()
+
+if args.status:
+    with open('./healthcheck.log', 'r', encoding='utf-8') as f:
+        content = f.read()
+        print(content)
+else:
+    with open('./config.json', 'r', encoding = 'utf-8') as f:
+        content = f.read()
+        config = json.loads(content)    # 字典
+        services = config['services']   # 列表
+    
+        for s in services:              # s:字典
+            r = requests.get(s['url'])
+            logging.info(f'{s["name"]}: {r.status_code}')
+
+
+    
+    
