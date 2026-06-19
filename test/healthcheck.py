@@ -36,13 +36,20 @@ while True:
         config = json.loads(content)    # 字典
         services = config['services']   # 列表
 
-        for s in services:              # s:字典
-            r = requests.get(s['url'])
+        try:
 
-            if r.status_code != 200:
-                 requests.post(args.webhook, json={"msg_type": "text", "content": {"text": f'{s["name"]}: 错误！'}})
-            else:
-                 logging.info(f'{s["name"]}: {r.status_code}')
+            for s in services:              # s:字典
+                r = requests.get(s['url'])
+
+                if args.webhook:
+
+                    if r.status_code != 200:
+                        requests.post(args.webhook, json={"msg_type": "text", "content": {"text": f'{s["name"]}: 错误！'}})
+                logging.info(f'{s["name"]}: {r.status_code}')
+        except Exception:
+            if args.webhook:
+                logging.error(f'{s["name"]} ')
+                requests.post(args.webhook, json={"msg_type": "text", "content": {"text": f'{s["name"]}: 错误！'}})
     if args.interval:
         time.sleep(args.interval)
     else:
