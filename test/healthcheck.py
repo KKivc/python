@@ -20,6 +20,7 @@ logging.basicConfig(
 parser = argparse.ArgumentParser()
 parser.add_argument('--status', action='store_true')
 parser.add_argument('--interval', type=int)
+parser.add_argument('--webhook', type=str)
 args = parser.parse_args()
 
 if args.status:
@@ -37,8 +38,13 @@ while True:
 
         for s in services:              # s:字典
             r = requests.get(s['url'])
-            logging.info(f'{s["name"]}: {r.status_code}')
+
+            if r.status_code != 200:
+                 requests.post(args.webhook, json={"msg_type": "text", "content": {"text": f'{s["name"]}: 错误！'}})
+            else:
+                 logging.info(f'{s["name"]}: {r.status_code}')
     if args.interval:
         time.sleep(args.interval)
     else:
         break
+
