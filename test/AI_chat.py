@@ -1,1 +1,3 @@
-import streamlit as st
+import requests
+
+print(dir(requests))
