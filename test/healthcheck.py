@@ -9,6 +9,7 @@ import json
 import requests
 import logging
 import argparse
+import time
 
 logging.basicConfig(
     level=logging.INFO,
@@ -18,22 +19,26 @@ logging.basicConfig(
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--status', action='store_true')
+parser.add_argument('--interval', type=int)
 args = parser.parse_args()
 
 if args.status:
-    with open('./healthcheck.log', 'r', encoding='utf-8') as f:
-        content = f.read()
-        print(content)
-else:
+        with open('./healthcheck.log', 'r', encoding='utf-8') as f:
+            content = f.read()
+            print(content)
+            exit()    
+
+while True:
+    
     with open('./config.json', 'r', encoding = 'utf-8') as f:
         content = f.read()
         config = json.loads(content)    # 字典
         services = config['services']   # 列表
-    
+
         for s in services:              # s:字典
             r = requests.get(s['url'])
             logging.info(f'{s["name"]}: {r.status_code}')
-
-
-    
-    
+    if args.interval:
+        time.sleep(args.interval)
+    else:
+        break
